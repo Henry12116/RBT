@@ -1,7 +1,7 @@
 CXX       = g++
 CPP_FILES = $(wildcard *.cpp)
 OBJS      = $(patsubst %.cpp,%.o,$(CPP_FILES))
-CXXFLAGS  = -O2 -Wall -Werror -pedantic-errors -fmessage-length=0
+CXXFLAGS  = -g -Wall -Werror -pedantic-errors -fmessage-length=0
 TARGET    = testrbt
 
 all: $(TARGET)

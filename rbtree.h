@@ -213,7 +213,8 @@ public:
 	void insert(const iterator &it, const std::pair<K, V> &key_value) {
 		K key = key_value.first;
 		V value = key_value.second;
-		Node<K, V> *x, *y, *insertedNode = Node<K, V>(key, value);
+		Node<K, V> *x, *y;
+		RedBlackNode<K, V> *insertedNode = new RedBlackNode<K, V>(key, value);
 
 		if (it != end()) {
 			x = it.node_ptr;
@@ -222,30 +223,24 @@ public:
 			x = root_;
 			y = NULL;
 		}
-		if (root_ == NULL){
+		while (x != NULL) {
+			y=x;
+			if (x->key() > key) {
+				x=x->left();
+			} else {
+				x=x->right();
+			}
+		}
+		insertedNode->set_parent(x);
+		if(y==NULL)
 			root_ = insertedNode;
-			insert_fixup(*insertedNode);
-			return;
-		}
-
-		if (x->value() > value) {
-			if (x->left() == NULL) {
-				insertedNode->set_parent(x);
-				x->set_left(insertedNode);
-			} else {
-				insert(x->left(), &key_value);
-			}
-		} else {
-			if (x->right() == NULL) {
-				insertedNode->set_parent(x);
-				x->set_right(insertedNode);
-			} else {
-				insert(x->right(), &key_value);
-			}
-		}
+		else if(insertedNode->key() < y->key())
+			y->set_left(insertedNode);
+		else
+			y->set_right(insertedNode);
 		//TODO
 		//CALL FIXUP
-		insert_fixup(*x);
+		//insert_fixup(*x);
 	}
 
 	/**
@@ -391,24 +386,20 @@ private:
 	 */
 	void insert_fixup(RedBlackNode<K, V> *z) {
 		// TODO
-		RedBlackNode<K,V> *parent = z->parent();
-		if(parent== NULL){
+		RedBlackNode<K, V> *parent = z->parent();
+		if (parent == NULL) {
 			z->set_color(BLACK);
 			return;
 		}
-		if(parent->parent()==NULL)
+		if (parent->parent() == NULL)
 			return;
 
-		RedBlackNode<K,V> *grandparent = parent->parent(), *uncle;
-		if(parent==grandparent->left()){
+		RedBlackNode<K, V> *grandparent = parent->parent(), *uncle;
+		if (parent == grandparent->left()) {
 			uncle = grandparent->right();
-		}else{
+		} else {
 			uncle = grandparent->left();
 		}
-
-
-
-		if(uncle != )
 		// Last line below
 		root_->set_color(BLACK);
 	}
@@ -433,6 +424,7 @@ private:
 	 */
 	int height(Node<K, V> *node) const {
 		// TODO
+		return 0;
 	}
 
 	/**
@@ -441,6 +433,7 @@ private:
 	 */
 	size_t leaf_count(Node<K, V> *node) const {
 		// TODO
+		return 0;
 	}
 
 	/**
@@ -450,6 +443,7 @@ private:
 	 */
 	size_t internal_node_count(Node<K, V> *node) const {
 		// TODO
+		return 0;
 	}
 
 	/**
@@ -460,6 +454,7 @@ private:
 	 */
 	int diameter(Node<K, V> *node) const {
 		// TODO
+		return 0;
 	}
 
 	/**
@@ -468,6 +463,7 @@ private:
 	 */
 	size_t width(Node<K, V> *node, size_t level) const {
 		// TODO
+		return 0;
 	}
 
 	size_t null_count() const {
@@ -479,6 +475,7 @@ private:
 	 */
 	size_t null_count(Node<K, V> *node) const {
 		// TODO
+		return 0;
 	}
 
 	size_t sum_levels() const {
@@ -498,6 +495,7 @@ private:
 	 */
 	size_t sum_levels(Node<K, V> *node, size_t level) const {
 		// TODO
+		return 0;
 	}
 
 	size_t sum_null_levels() const {
@@ -519,6 +517,7 @@ private:
 	 */
 	size_t sum_null_levels(Node<K, V> *node, size_t level) const {
 		// TODO
+		return 0;
 	}
 };
 
