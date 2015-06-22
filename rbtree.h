@@ -408,14 +408,42 @@ private:
 	 * Left-rotate method described on p. 313 of CLRS.
 	 */
 	void left_rotate(Node<K, V> *x) {
-		// TODO
+		RedBlackNode<K,V> *y = x->right();
+		x->right() = y->left();
+		if(y->left() != NULL)
+			y->left()->parent() = x;
+		y->parent == NULL;
+		if(x->parent == NULL)
+			root_-> y;
+		else if(x == (x->parent()->left())){
+			x->parent()->left() = y;
+		}
+		else{
+			x->parent()->right() = y;
+			y->left() = x;
+			x->parent() = y;
+		}
 	}
 
 	/**
 	 * Right-rotate method described on p. 313 of CLRS.
 	 */
 	void right_rotate(Node<K, V> *x) {
-		// TODO
+		RedBlackNode<K,V> *y = x->left();
+		x->left() = y->right();
+		if(y->right() != NULL)
+			y->right()->parent() = x;
+		y->parent == NULL;
+		if(x->parent == NULL)
+			root_-> y;
+		else if(x == (x->parent()->right())){
+			x->parent()->right() = y;
+		}
+		else{
+			x->parent()->left() = y;
+			y->right() = x;
+			x->parent() = y;
+		}
 	}
 
 	/**
