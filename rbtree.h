@@ -492,8 +492,28 @@ private:
 	 * Returns the height of the red-black tree starting at node.
 	 * A null node starts at height 0.
 	 */
+	int maxHeightHelper(int x, int y)
+	{
+		if (x >= y)
+		{
+			return x;
+		}
+		else
+		{
+			return y;
+		}
+	}
+
 	int height(Node<K, V> *node) const {
 		// TODO
+		if (node == NULL)
+		{
+			return 0;
+		}
+		else
+		{
+			return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
+		}
 		return 0;
 	}
 
@@ -502,8 +522,20 @@ private:
 	 * For this method, a leaf is a non-null node that has no children.
 	 */
 	size_t leaf_count(Node<K, V> *node) const {
-		// TODO
-		return 0;
+		Node<K, V> *left_temp = node->left();
+		Node<K, V> *right_temp = node->right();
+		if (node == NULL)
+		{
+			return 0;
+		}
+		else if (left_temp == NULL && right_temp == NULL)
+		{
+			return 1;
+		}
+		else
+		{
+			return leaf_count(node->left()) + leaf_count(node->right());
+		}
 	}
 
 	/**
@@ -513,7 +545,20 @@ private:
 	 */
 	size_t internal_node_count(Node<K, V> *node) const {
 		// TODO
-		return 0;
+		Node<K, V> *left_temp = node->left();
+		Node<K, V> *right_temp = node->right();
+		if (node == NULL)
+		{
+			return 0;
+		}
+		else if ( (left_temp == NULL && (right_temp != NULL)) || ((left_temp != NULL) && right_temp == NULL) )
+		{
+			return 1;
+		}
+		else
+		{
+			return (internal_node_count(node->left()) + internal_node_count(node->right()));
+		}
 	}
 
 	/**
