@@ -240,7 +240,7 @@ public:
 			y->set_right(insertedNode);
 		//TODO
 		//CALL FIXUP
-		//insert_fixup(*x);
+		insert_fixup(insertedNode);
 	}
 
 	/**
@@ -410,33 +410,33 @@ private:
 					uncle->set_color(BLACK);
 					grandparent->set_color(RED);
 					z = grandparent;
-					insert_fixup(*z);
+					insert_fixup(z);
 				} else if (grandparent->left() == parent) {
 					//Violation Case 2
 					//Case 2a
 					if (uncle->color() == BLACK && parent->right() == z) {
 						z = parent;
-						left_rotate(*z);
-						insert_fixup(*z);
+						left_rotate(z);
+						insert_fixup(z);
 					} else if (uncle->color() == BLACK && parent->left() == z) {
 						//Case 3a
 						parent->set_color(BLACK);
 						grandparent->set_color(RED);
-						right_rotate(*grandparent);
-						insert_fixup(*z);
+						right_rotate(grandparent);
+						insert_fixup(z);
 					}
 				} else {
 					//case 2b
 					if (uncle->color() == BLACK && parent->left() == z) {
 						z = parent;
-						right_rotate(*z);
-						insert_fixup(*z);
+						right_rotate(z);
+						insert_fixup(z);
 					} else {
 						//case 3b
 						parent->set_color(BLACK);
 						grandparent->set_color(RED);
-						left_rotate(*grandparent);
-						insert_fixup(*z);
+						left_rotate(grandparent);
+						insert_fixup(z);
 					}
 				}
 			}
@@ -449,22 +449,19 @@ private:
 	 * Left-rotate method described on p. 313 of CLRS.
 	 */
 	void left_rotate(Node<K, V> *x) {
-		///YOOOOOOO J MAN! can you fix all these from x(or y)->left(or right)= SOMETHING to
-		//x->set_left(SOMETHING);
-		//ALSO TRY AND DO THAT FOR RIGHT ROTATE;
-		RedBlackNode<K, V> *y = x->right();
-		x->right() = y->left();
+		RedBlackNode<K, V> *y = static_cast< RedBlackNode<K, V>* > (x->right());
+		x->set_right(y->left());
 		if (y->left() != NULL)
-			y->left()->parent() = x;
-		y->parent == NULL;
-		if (x->parent == NULL)
-			root_->y;
+			y->left()->set_parent(x);
+		y->set_parent(NULL);
+		if (x->parent() == NULL)
+			root_= y;
 		else if (x == (x->parent()->left())) {
-			x->parent()->left() = y; // EXAMPLE OF WRONG
+			x->parent()->set_left(y);
 		} else {
-			x->parent()->set_right(y);//EXAMPLE OF CORRECT
-			y->left() = x;
-			x->parent() = y;
+			x->parent()->set_right(y);
+			y->set_left(x);
+			x->set_parent(y);
 		}
 	}
 
@@ -472,19 +469,19 @@ private:
 	 * Right-rotate method described on p. 313 of CLRS.
 	 */
 	void right_rotate(Node<K, V> *x) {
-		RedBlackNode<K, V> *y = x->left();
-		x->left() = y->right();
+		RedBlackNode<K, V> *y = static_cast< RedBlackNode<K, V>* > (x->left());
+		x->set_left(y->right());
 		if (y->right() != NULL)
-			y->right()->parent() = x;
-		y->parent == NULL;
-		if (x->parent == NULL)
-			root_->y;
+			y->right()->set_parent(x);
+		y->set_parent(NULL);
+		if (x->parent() == NULL)
+			root_= y;
 		else if (x == (x->parent()->right())) {
-			x->parent()->right() = y;
+			x->parent()->set_right(y);
 		} else {
-			x->parent()->left() = y;
-			y->right() = x;
-			x->parent() = y;
+			x->parent()->set_left(y);
+			y->set_right(x);
+			x->set_parent(y);
 		}
 	}
 
@@ -494,26 +491,27 @@ private:
 	 */
 	int maxHeightHelper(int x, int y)
 	{
-		if (x >= y)
+		/*if (x >= y)
 		{
 			return x;
 		}
 		else
 		{
 			return y;
-		}
+		}*/
+		return 0;
 	}
 
 	int height(Node<K, V> *node) const {
 		// TODO
-		if (node == NULL)
+		/* if (node == NULL)
 		{
 			return 0;
 		}
 		else
 		{
 			return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
-		}
+		}*/
 		return 0;
 	}
 
@@ -545,7 +543,7 @@ private:
 	 */
 	size_t internal_node_count(Node<K, V> *node) const {
 		// TODO
-		Node<K, V> *left_temp = node->left();
+		/*Node<K, V> *left_temp = node->left();
 		Node<K, V> *right_temp = node->right();
 		if (node == NULL)
 		{
@@ -558,7 +556,8 @@ private:
 		else
 		{
 			return (internal_node_count(node->left()) + internal_node_count(node->right()));
-		}
+		}*/
+		return 0;
 	}
 
 	/**
