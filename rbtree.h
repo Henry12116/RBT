@@ -231,13 +231,13 @@ public:
 				x = x->right();
 			}
 		}
-		insertedNode->set_parent(x);
 		if (y == NULL)
 			root_ = insertedNode;
 		else if (insertedNode->key() < y->key())
 			y->set_left(insertedNode);
 		else
 			y->set_right(insertedNode);
+		insertedNode->set_parent(y);
 		//TODO
 		//CALL FIXUP
 		insert_fixup(insertedNode);
@@ -414,11 +414,11 @@ private:
 				} else if (grandparent->left() == parent) {
 					//Violation Case 2
 					//Case 2a
-					if (uncle->color() == BLACK && parent->right() == z) {
+					if ((uncle==NULL || (uncle != NULL && uncle->color() == BLACK)) && parent->right() == z) {
 						z = parent;
 						left_rotate(z);
 						insert_fixup(z);
-					} else if (uncle->color() == BLACK && parent->left() == z) {
+					} else if ((uncle != NULL && uncle->color() == BLACK) && parent->left() == z) {
 						//Case 3a
 						parent->set_color(BLACK);
 						grandparent->set_color(RED);
