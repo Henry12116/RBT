@@ -224,17 +224,17 @@ public:
 			y = NULL;
 		}
 		while (x != NULL) {
-			y=x;
+			y = x;
 			if (x->key() > key) {
-				x=x->left();
+				x = x->left();
 			} else {
-				x=x->right();
+				x = x->right();
 			}
 		}
 		insertedNode->set_parent(x);
-		if(y==NULL)
+		if (y == NULL)
 			root_ = insertedNode;
-		else if(insertedNode->key() < y->key())
+		else if (insertedNode->key() < y->key())
 			y->set_left(insertedNode);
 		else
 			y->set_right(insertedNode);
@@ -391,14 +391,55 @@ private:
 			z->set_color(BLACK);
 			return;
 		}
-		if (parent->parent() == NULL)
-			return;
+		if ((parent != NULL && parent->color() == RED)
+				|| root_->color() != BLACK) {
+			if (parent->parent() == NULL)
+				return;
 
-		RedBlackNode<K, V> *grandparent = parent->parent(), *uncle;
-		if (parent == grandparent->left()) {
-			uncle = grandparent->right();
-		} else {
-			uncle = grandparent->left();
+			RedBlackNode<K, V> *grandparent = parent->parent(), *uncle;
+			if (parent == grandparent->left()) {
+				uncle = grandparent->right();
+			} else {
+				uncle = grandparent->left();
+			}
+			if (parent->color() == RED) {
+				//WE HAVE AN ISSUE;
+				//Violation Case 1
+				if (uncle != NULL && uncle->color() == RED) {
+					parent->set_color(BLACK);
+					uncle->set_color(BLACK);
+					grandparent->set_color(RED);
+					z = grandparent;
+					insert_fixup(*z);
+				} else if (grandparent->left() == parent) {
+					//Violation Case 2
+					//Case 2a
+					if (uncle->color() == BLACK && parent->right() == z) {
+						z = parent;
+						left_rotate(*z);
+						insert_fixup(*z);
+					} else if (uncle->color() == BLACK && parent->left() == z) {
+						//Case 3a
+						parent->set_color(BLACK);
+						grandparent->set_color(RED);
+						right_rotate(*grandparent);
+						insert_fixup(*z);
+					}
+				} else {
+					//case 2b
+					if (uncle->color() == BLACK && parent->left() == z) {
+						z = parent;
+						right_rotate(*z);
+						insert_fixup(*z);
+					} else {
+						//case 3b
+						parent->set_color(BLACK);
+						grandparent->set_color(RED);
+						left_rotate(*grandparent);
+						insert_fixup(*z);
+					}
+				}
+			}
 		}
 		// Last line below
 		root_->set_color(BLACK);
@@ -408,18 +449,20 @@ private:
 	 * Left-rotate method described on p. 313 of CLRS.
 	 */
 	void left_rotate(Node<K, V> *x) {
-		RedBlackNode<K,V> *y = x->right();
+		///YOOOOOOO J MAN! can you fix all these from x(or y)->left(or right)= SOMETHING to
+		//x->set_left(SOMETHING);
+		//ALSO TRY AND DO THAT FOR RIGHT ROTATE;
+		RedBlackNode<K, V> *y = x->right();
 		x->right() = y->left();
-		if(y->left() != NULL)
+		if (y->left() != NULL)
 			y->left()->parent() = x;
 		y->parent == NULL;
-		if(x->parent == NULL)
-			root_-> y;
-		else if(x == (x->parent()->left())){
-			x->parent()->left() = y;
-		}
-		else{
-			x->parent()->right() = y;
+		if (x->parent == NULL)
+			root_->y;
+		else if (x == (x->parent()->left())) {
+			x->parent()->left() = y; // EXAMPLE OF WRONG
+		} else {
+			x->parent()->set_right(y);//EXAMPLE OF CORRECT
 			y->left() = x;
 			x->parent() = y;
 		}
@@ -429,17 +472,16 @@ private:
 	 * Right-rotate method described on p. 313 of CLRS.
 	 */
 	void right_rotate(Node<K, V> *x) {
-		RedBlackNode<K,V> *y = x->left();
+		RedBlackNode<K, V> *y = x->left();
 		x->left() = y->right();
-		if(y->right() != NULL)
+		if (y->right() != NULL)
 			y->right()->parent() = x;
 		y->parent == NULL;
-		if(x->parent == NULL)
-			root_-> y;
-		else if(x == (x->parent()->right())){
+		if (x->parent == NULL)
+			root_->y;
+		else if (x == (x->parent()->right())) {
 			x->parent()->right() = y;
-		}
-		else{
+		} else {
 			x->parent()->left() = y;
 			y->right() = x;
 			x->parent() = y;
