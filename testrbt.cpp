@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) {
             }
             try {
                 rbti->insert(value, value);
+                cout << rbt->to_ascii_drawing() << endl << endl;
             } catch (const tree_exception &te) {
                 cerr << "Warning: " << te.what() << endl;
             }

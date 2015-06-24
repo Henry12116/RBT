@@ -391,10 +391,15 @@ private:
 			z->set_color(BLACK);
 			return;
 		}
-		if ((parent != NULL && parent->color() == RED)
+		if ((parent->color() == RED
+				&& ((parent->left() != NULL && parent->left()->color() == RED)
+						|| (parent->right() != NULL
+								&& parent->right()->color() == RED)))
 				|| root_->color() != BLACK) {
-			if (parent->parent() == NULL)
+			if (parent->parent() == NULL) {
+				root_->set_color(BLACK);
 				return;
+			}
 
 			RedBlackNode<K, V> *grandparent = parent->parent(), *uncle;
 			if (parent == grandparent->left()) {
@@ -402,42 +407,42 @@ private:
 			} else {
 				uncle = grandparent->left();
 			}
-			if (parent->color() == RED) {
-				//WE HAVE AN ISSUE;
-				//Violation Case 1
-				if (uncle != NULL && uncle->color() == RED) {
-					parent->set_color(BLACK);
-					uncle->set_color(BLACK);
-					grandparent->set_color(RED);
-					z = grandparent;
+
+			//Violation Case 1
+			if (uncle != NULL && uncle->color() == RED) {
+				parent->set_color(BLACK);
+				uncle->set_color(BLACK);
+				grandparent->set_color(RED);
+				z = grandparent;
+				insert_fixup(z);
+			} else if (grandparent->left() == parent) {
+				//Violation Case 2
+				//Case 2a
+				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
+						&& parent->right() == z) {
+					z = parent;
+					left_rotate(z);
 					insert_fixup(z);
-				} else if (grandparent->left() == parent) {
-					//Violation Case 2
-					//Case 2a
-					if ((uncle==NULL || (uncle != NULL && uncle->color() == BLACK)) && parent->right() == z) {
-						z = parent;
-						left_rotate(z);
-						insert_fixup(z);
-					} else if ((uncle != NULL && uncle->color() == BLACK) && parent->left() == z) {
-						//Case 3a
-						parent->set_color(BLACK);
-						grandparent->set_color(RED);
-						right_rotate(grandparent);
-						insert_fixup(z);
-					}
+				} else if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
+						&& parent->left() == z) {
+					//Case 3a
+					parent->set_color(BLACK);
+					grandparent->set_color(RED);
+					right_rotate(grandparent);
+					insert_fixup(z);
+				}
+			} else {
+				//case 2b
+				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK)) && parent->left() == z) {
+					z = parent;
+					right_rotate(z);
+					insert_fixup(z);
 				} else {
-					//case 2b
-					if (uncle->color() == BLACK && parent->left() == z) {
-						z = parent;
-						right_rotate(z);
-						insert_fixup(z);
-					} else {
-						//case 3b
-						parent->set_color(BLACK);
-						grandparent->set_color(RED);
-						left_rotate(grandparent);
-						insert_fixup(z);
-					}
+					//case 3b
+					parent->set_color(BLACK);
+					grandparent->set_color(RED);
+					left_rotate(grandparent);
+					insert_fixup(z);
 				}
 			}
 		}
@@ -449,69 +454,66 @@ private:
 	 * Left-rotate method described on p. 313 of CLRS.
 	 */
 	void left_rotate(Node<K, V> *x) {
-		RedBlackNode<K, V> *y = static_cast< RedBlackNode<K, V>* > (x->right());
+		RedBlackNode<K, V> *y = static_cast<RedBlackNode<K, V>*>(x->right());
 		x->set_right(y->left());
 		if (y->left() != NULL)
 			y->left()->set_parent(x);
-		y->set_parent(NULL);
+		y->set_parent(x->parent());
 		if (x->parent() == NULL)
-			root_= y;
-		else if (x == (x->parent()->left())) {
+			root_ = y;
+		else if (x == (x->parent()->left()))
 			x->parent()->set_left(y);
-		} else {
+		else
 			x->parent()->set_right(y);
-			y->set_left(x);
-			x->set_parent(y);
-		}
+		y->set_left(x);
+		x->set_parent(y);
 	}
 
 	/**
 	 * Right-rotate method described on p. 313 of CLRS.
 	 */
 	void right_rotate(Node<K, V> *x) {
-		RedBlackNode<K, V> *y = static_cast< RedBlackNode<K, V>* > (x->left());
+		RedBlackNode<K, V> *y = static_cast<RedBlackNode<K, V>*>(x->left());
 		x->set_left(y->right());
 		if (y->right() != NULL)
 			y->right()->set_parent(x);
-		y->set_parent(NULL);
+		y->set_parent(x->parent());
 		if (x->parent() == NULL)
-			root_= y;
-		else if (x == (x->parent()->right())) {
+			root_ = y;
+		else if (x == (x->parent()->right()))
 			x->parent()->set_right(y);
-		} else {
+		else
 			x->parent()->set_left(y);
-			y->set_right(x);
-			x->set_parent(y);
-		}
+		y->set_right(x);
+		x->set_parent(y);
 	}
 
 	/**
 	 * Returns the height of the red-black tree starting at node.
 	 * A null node starts at height 0.
 	 */
-	int maxHeightHelper(int x, int y)
-	{
+	int maxHeightHelper(int x, int y) {
 		/*if (x >= y)
-		{
-			return x;
-		}
-		else
-		{
-			return y;
-		}*/
+		 {
+		 return x;
+		 }
+		 else
+		 {
+		 return y;
+		 }*/
 		return 0;
 	}
 
 	int height(Node<K, V> *node) const {
 		// TODO
 		/* if (node == NULL)
-		{
-			return 0;
-		}
-		else
-		{
-			return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
-		}*/
+		 {
+		 return 0;
+		 }
+		 else
+		 {
+		 return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
+		 }*/
 		return 0;
 	}
 
@@ -522,16 +524,11 @@ private:
 	size_t leaf_count(Node<K, V> *node) const {
 		Node<K, V> *left_temp = node->left();
 		Node<K, V> *right_temp = node->right();
-		if (node == NULL)
-		{
+		if (node == NULL) {
 			return 0;
-		}
-		else if (left_temp == NULL && right_temp == NULL)
-		{
+		} else if (left_temp == NULL && right_temp == NULL) {
 			return 1;
-		}
-		else
-		{
+		} else {
 			return leaf_count(node->left()) + leaf_count(node->right());
 		}
 	}
@@ -544,19 +541,19 @@ private:
 	size_t internal_node_count(Node<K, V> *node) const {
 		// TODO
 		/*Node<K, V> *left_temp = node->left();
-		Node<K, V> *right_temp = node->right();
-		if (node == NULL)
-		{
-			return 0;
-		}
-		else if ( (left_temp == NULL && (right_temp != NULL)) || ((left_temp != NULL) && right_temp == NULL) )
-		{
-			return 1;
-		}
-		else
-		{
-			return (internal_node_count(node->left()) + internal_node_count(node->right()));
-		}*/
+		 Node<K, V> *right_temp = node->right();
+		 if (node == NULL)
+		 {
+		 return 0;
+		 }
+		 else if ( (left_temp == NULL && (right_temp != NULL)) || ((left_temp != NULL) && right_temp == NULL) )
+		 {
+		 return 1;
+		 }
+		 else
+		 {
+		 return (internal_node_count(node->left()) + internal_node_count(node->right()));
+		 }*/
 		return 0;
 	}
 
