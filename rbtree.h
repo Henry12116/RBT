@@ -423,7 +423,8 @@ private:
 					z = parent;
 					left_rotate(z);
 					insert_fixup(z);
-				} else if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
+				} else if ((uncle == NULL
+						|| (uncle != NULL && uncle->color() == BLACK))
 						&& parent->left() == z) {
 					//Case 3a
 					parent->set_color(BLACK);
@@ -433,7 +434,8 @@ private:
 				}
 			} else {
 				//case 2b
-				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK)) && parent->left() == z) {
+				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
+						&& parent->left() == z) {
 					z = parent;
 					right_rotate(z);
 					insert_fixup(z);
@@ -492,29 +494,13 @@ private:
 	 * Returns the height of the red-black tree starting at node.
 	 * A null node starts at height 0.
 	 */
-	int maxHeightHelper(int x, int y) {
-		/*if (x >= y)
-		 {
-		 return x;
-		 }
-		 else
-		 {
-		 return y;
-		 }*/
-		return 0;
-	}
 
 	int height(Node<K, V> *node) const {
 		// TODO
-		/* if (node == NULL)
-		 {
-		 return 0;
-		 }
-		 else
-		 {
-		 return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
-		 }*/
-		return 0;
+		if (node == NULL)
+			return 0;
+		else
+			return std::max(height(node->left())+1, height(node->right())+1);
 	}
 
 	/**
