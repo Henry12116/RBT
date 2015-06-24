@@ -489,29 +489,29 @@ private:
 	 * Returns the height of the red-black tree starting at node.
 	 * A null node starts at height 0.
 	 */
-	int maxHeightHelper(int x, int y)
+	/*int maxHeightHelper(int x, int y)
 	{
-		/*if (x >= y)
+		if (x >= y)
 		{
 			return x;
 		}
 		else
 		{
 			return y;
-		}*/
+		}
 		return 0;
-	}
+	}*/
 
 	int height(Node<K, V> *node) const {
 		// TODO
-		/* if (node == NULL)
+		 if (node == NULL)
 		{
 			return 0;
 		}
 		else
 		{
-			return maxHeightHelper( height(node->left()), height(node->right()) ) + 1;
-		}*/
+			//return 1 + max( height(node->left()), height(node->right()) );
+		}
 		return 0;
 	}
 
