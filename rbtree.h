@@ -215,14 +215,12 @@ public:
 		V value = key_value.second;
 		Node<K, V> *x, *y;
 		RedBlackNode<K, V> *insertedNode = new RedBlackNode<K, V>(key, value);
-		std::cout << "Is Duplicate Result: " << is_duplicate(root_, insertedNode) << std::endl;
 		if (root_ != NULL && is_duplicate(root_, insertedNode)) {
 			std::stringstream ss;
 			ss << key;
 			std::string str_key = ss.str();
-			tree_exception* e = new tree_exception("Attempt to insert duplicate key '" + str_key + "'.");
+			tree_exception e("Attempt to insert duplicate key '" + str_key + "'.");
 			throw e;
-			delete e;
 		}
 		if (it != end()) {
 			x = it.node_ptr;
@@ -253,17 +251,11 @@ public:
 	}
 
 	bool is_duplicate(Node<K, V> *nodeStart, Node<K, V> *nodeSearch) {
-		if (nodeStart == NULL) {
+		if (nodeStart == NULL)
 			return false;
-		}
-		if (nodeSearch->value() == nodeStart->value()) {
+		if (nodeSearch->value() == nodeStart->value())
 			return true;
-		} else if (nodeSearch->value() > nodeStart->value()) {
-			is_duplicate(nodeStart->right(), nodeSearch);
-		} else if (nodeSearch->value() < nodeStart->value()) {
-			is_duplicate(nodeStart->left(), nodeSearch);
-		}
-		return false;
+		return (is_duplicate(nodeStart->left(), nodeSearch) or is_duplicate(nodeStart->right(), nodeSearch));
 	}
 
 	/**
