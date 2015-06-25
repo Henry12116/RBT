@@ -238,6 +238,7 @@ public:
 		else
 			y->set_right(insertedNode);
 		insertedNode->set_parent(y);
+		size_++;
 		//TODO
 		//CALL FIXUP
 		insert_fixup(insertedNode);
@@ -554,35 +555,24 @@ private:
 	 * Width is defined as the number of nodes residing at a level.
 	 */
 	size_t width(Node<K, V> *node, size_t level) const {
-		int maxWidth = 0;
-		 int width = 0;
-		 for (unsigned int i = 1; i < level; ++i)
-		 {
-		 width = widthHelper(node, level);
-		 }
-		 if (width > maxWidth)
-		 {
-		 maxWidth = width;
-		 }
-		 return maxWidth;
+		if (node == NULL)
+			return 0;
+		else if (level == 0)
+			return 1;
+		else
+			return widthHelper(node->left(), level - 1)
+					+ widthHelper(node->right(), level - 1);
 	}
 
-	size_t widthHelper(Node<K, V> *node, size_t level) const
-	 {
-	 if (node == NULL)
-	 {
-	 return 0;
-	 }
-	 else if (level == 1)
-	 {
-	 return 1;
-	 }
-	 else
-	 {
-	 return widthHelper(node->left(), level - 1) +
-	 widthHelper(node->right(), level - 1);
-	 }
-	 }
+	size_t widthHelper(Node<K, V> *node, size_t level) const {
+		if (node == NULL)
+			return 0;
+		else if (level == 0)
+			return 1;
+		else
+			return widthHelper(node->left(), level - 1)
+					+ widthHelper(node->right(), level - 1);
+	}
 
 	size_t null_count() const {
 		return null_count(root_);
@@ -593,14 +583,9 @@ private:
 	 */
 	size_t null_count(Node<K, V> *node) const {
 		if (node == NULL)
-		{
 			return 1;
-		}
 		else
-		{
-			return null_count(node->left()) +
-					null_count(node->right());
-		}
+			return null_count(node->left()) + null_count(node->right());
 	}
 
 	size_t sum_levels() const {
@@ -619,7 +604,10 @@ private:
 	 * has sum 0 + 2(1) + 2 = 4.
 	 */
 	size_t sum_levels(Node<K, V> *node, size_t level) const {
-		return 0;
+		if (node == NULL)
+			return 0;
+		return level + sum_levels(node->right(), level + 1)
+				+ sum_levels(node->right(), level + 1);
 	}
 
 	size_t sum_null_levels() const {
@@ -640,8 +628,10 @@ private:
 	 * has sum 3(2) + 2(3) = 12.
 	 */
 	size_t sum_null_levels(Node<K, V> *node, size_t level) const {
-		// TODO
-		return 0;
+		if (node == NULL)
+			return level;
+		return sum_levels(node->right(), level + 1)
+				+ sum_levels(node->right(), level + 1);
 	}
 };
 
