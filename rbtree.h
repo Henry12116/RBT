@@ -496,7 +496,6 @@ private:
 	 */
 
 	int height(Node<K, V> *node) const {
-		// TODO
 		if (node == NULL)
 			return 0;
 		else
@@ -522,93 +521,128 @@ private:
 	 * An internal node has at least one child.
 	 */
 	size_t internal_node_count(Node<K, V> *node) const {
-		// TODO
 		Node<K, V> *left_temp = node->left();
 		Node<K, V> *right_temp = node->right();
-		if (node == NULL || (node!=NULL && left_temp==NULL && right_temp==NULL))
+		if (node == NULL
+				|| (node != NULL && left_temp == NULL && right_temp == NULL))
 			return 0;
 		else if ((left_temp == NULL) && (right_temp != NULL))
 			return 1 + internal_node_count(right_temp);
-		else if ((left_temp!=NULL) && (right_temp==NULL))
+		else if ((left_temp != NULL) && (right_temp == NULL))
 			return 1 + internal_node_count(left_temp);
 		else
 			return (internal_node_count(node->left())
-					+ internal_node_count(node->right()))+ 1;
-}
+					+ internal_node_count(node->right())) + 1;
+	}
 
-/**
- * Returns the diameter of the red-black tree rooted at node.
- * Diameter is defined as the number of nodes on the longest path between
- * two (non-null) leaves in the tree. The path does not necessarily have to
- * pass through the root.
- */
-int diameter(Node<K, V> *node) const {
-	// TODO
-	return 0;
-}
+	/**
+	 * Returns the diameter of the red-black tree rooted at node.
+	 * Diameter is defined as the number of nodes on the longest path between
+	 * two (non-null) leaves in the tree. The path does not necessarily have to
+	 * pass through the root.
+	 */
+	int diameter(Node<K, V> *node) const {
+		int lheight = height(node->left());
+		int rheight = height(node->right());
 
-/**
- * Returns the width of the red-black tree at the designated level.
- * Width is defined as the number of nodes residing at a level.
- */
-size_t width(Node<K, V> *node, size_t level) const {
-	// TODO
-	return 0;
-}
+		return lheight + rheight;
 
-size_t null_count() const {
-	return null_count(root_);
-}
+	}
 
-/**
- * Returns the count of null nodes in the red-black tree starting at node.
- */
-size_t null_count(Node<K, V> *node) const {
-	// TODO
-	return 0;
-}
+	/**
+	 * Returns the width of the red-black tree at the designated level.
+	 * Width is defined as the number of nodes residing at a level.
+	 */
+	size_t width(Node<K, V> *node, size_t level) const {
+		int maxWidth = 0;
+		 int width = 0;
+		 for (unsigned int i = 1; i < level; ++i)
+		 {
+		 width = widthHelper(node, level);
+		 }
+		 if (width > maxWidth)
+		 {
+		 maxWidth = width;
+		 }
+		 return maxWidth;
+	}
 
-size_t sum_levels() const {
-	return sum_levels(root_, 0);
-}
+	size_t widthHelper(Node<K, V> *node, size_t level) const
+	 {
+	 if (node == NULL)
+	 {
+	 return 0;
+	 }
+	 else if (level == 1)
+	 {
+	 return 1;
+	 }
+	 else
+	 {
+	 return widthHelper(node->left(), level - 1) +
+	 widthHelper(node->right(), level - 1);
+	 }
+	 }
 
-/**
- * Returns the sum of the levels of each non-null node in the red-black
- * tree starting at node.
- * For example, the tree
- *   5 <- level 0
- *  / \
+	size_t null_count() const {
+		return null_count(root_);
+	}
+
+	/**
+	 * Returns the count of null nodes in the red-black tree starting at node.
+	 */
+	size_t null_count(Node<K, V> *node) const {
+		if (node == NULL)
+		{
+			return 1;
+		}
+		else
+		{
+			return null_count(node->left()) +
+					null_count(node->right());
+		}
+	}
+
+	size_t sum_levels() const {
+		return sum_levels(root_, 0);
+	}
+
+	/**
+	 * Returns the sum of the levels of each non-null node in the red-black
+	 * tree starting at node.
+	 * For example, the tree
+	 *   5 <- level 0
+	 *  / \
      * 2   8 <- level 1
- *      \
+	 *      \
      *       10 <- level 2
- * has sum 0 + 2(1) + 2 = 4.
- */
-size_t sum_levels(Node<K, V> *node, size_t level) const {
-	// TODO
-	return 0;
-}
+	 * has sum 0 + 2(1) + 2 = 4.
+	 */
+	size_t sum_levels(Node<K, V> *node, size_t level) const {
+		return 0;
+	}
 
-size_t sum_null_levels() const {
-	return sum_null_levels(root_, 0);
-}
+	size_t sum_null_levels() const {
+		return sum_null_levels(root_, 0);
+	}
 
-/**
- * Returns the sum of the levels of each null node in the red-black tree
- * starting at node.
- * For example, the tree
- *    5 <- level 0
- *   / \
+	/**
+	 * Returns the sum of the levels of each null node in the red-black tree
+	 * starting at node.
+	 * For example, the tree
+	 *    5 <- level 0
+	 *   / \
      *  2   8 <- level 1
- * / \ / \
+	 * / \ / \
      * * * * 10 <- level 2
- *       / \
+	 *       / \
      *       * * <- level 3
- * has sum 3(2) + 2(3) = 12.
- */
-size_t sum_null_levels(Node<K, V> *node, size_t level) const {
-	// TODO
-	return 0;
-}
+	 * has sum 3(2) + 2(3) = 12.
+	 */
+	size_t sum_null_levels(Node<K, V> *node, size_t level) const {
+		// TODO
+		return 0;
+	}
 };
 
 #endif /* RBTREE_H_ */
