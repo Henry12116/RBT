@@ -219,7 +219,8 @@ public:
 			std::stringstream ss;
 			ss << key;
 			std::string str_key = ss.str();
-			tree_exception e("Attempt to insert duplicate key '" + str_key + "'.");
+			tree_exception e(
+					"Attempt to insert duplicate key '" + str_key + "'.");
 			throw e;
 		}
 		if (it != end()) {
@@ -255,7 +256,8 @@ public:
 			return false;
 		if (nodeSearch->value() == nodeStart->value())
 			return true;
-		return (is_duplicate(nodeStart->left(), nodeSearch) or is_duplicate(nodeStart->right(), nodeSearch));
+		return (is_duplicate(nodeStart->left(), nodeSearch)
+				or is_duplicate(nodeStart->right(), nodeSearch));
 	}
 
 	/**
@@ -536,10 +538,11 @@ private:
 	 * An internal node has at least one child.
 	 */
 	size_t internal_node_count(Node<K, V> *node) const {
+		if(node==NULL)
+			return 0;
 		Node<K, V> *left_temp = node->left();
 		Node<K, V> *right_temp = node->right();
-		if (node == NULL
-				|| (node != NULL && left_temp == NULL && right_temp == NULL))
+		if (node != NULL && left_temp == NULL && right_temp == NULL)
 			return 0;
 		else if ((left_temp == NULL) && (right_temp != NULL))
 			return 1 + internal_node_count(right_temp);
@@ -557,6 +560,8 @@ private:
 	 * pass through the root.
 	 */
 	int diameter(Node<K, V> *node) const {
+		if (node==NULL)
+			return 0;
 		int lheight = height(node->left());
 		int rheight = height(node->right());
 
@@ -620,7 +625,7 @@ private:
 	size_t sum_levels(Node<K, V> *node, size_t level) const {
 		if (node == NULL)
 			return 0;
-		return level + sum_levels(node->right(), level + 1)
+		return level + sum_levels(node->left(), level + 1)
 				+ sum_levels(node->right(), level + 1);
 	}
 
