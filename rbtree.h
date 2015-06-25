@@ -215,12 +215,14 @@ public:
 		V value = key_value.second;
 		Node<K, V> *x, *y;
 		RedBlackNode<K, V> *insertedNode = new RedBlackNode<K, V>(key, value);
-		if (root_ != NULL && is_duplicate(insertedNode)) {
+		std::cout << "Is Duplicate Result: " << is_duplicate(root_, insertedNode) << std::endl;
+		if (root_ != NULL && is_duplicate(root_, insertedNode)) {
 			std::stringstream ss;
 			ss << key;
 			std::string str_key = ss.str();
-			throw new tree_exception(
-					"Attempt to insert duplicate key '" + str_key + "'.")
+			tree_exception* e = new tree_exception("Attempt to insert duplicate key '" + str_key + "'.");
+			throw e;
+			delete e;
 		}
 		if (it != end()) {
 			x = it.node_ptr;
@@ -250,14 +252,14 @@ public:
 		insert_fixup(insertedNode);
 	}
 
-	bool is_Duplicate(Node<K, V> *nodeStart, Node<K, V> *nodeSearch) {
+	bool is_duplicate(Node<K, V> *nodeStart, Node<K, V> *nodeSearch) {
 		if (nodeStart == NULL) {
 			return false;
 		}
 		if (nodeSearch->value() == nodeStart->value()) {
 			return true;
 		} else if (nodeSearch->value() > nodeStart->value()) {
-			is_Duplicate(nodeStart->right(), nodeSearch);
+			is_duplicate(nodeStart->right(), nodeSearch);
 		} else if (nodeSearch->value() < nodeStart->value()) {
 			is_duplicate(nodeStart->left(), nodeSearch);
 		}
@@ -343,8 +345,6 @@ public:
 	 * visited to find a key that is not present.
 	 */
 	double unsuccessful_search_cost() const {
-		std::cout << "Sum of Null Levels: " << sum_null_levels() << std::endl;
-		std::cout << "Null Count " << null_count() << std::endl;
 		return (double) sum_null_levels() / null_count();
 	}
 
