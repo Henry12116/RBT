@@ -219,6 +219,7 @@ public:
 			std::stringstream ss;
 			ss << key;
 			std::string str_key = ss.str();
+			delete insertedNode;
 			tree_exception e(
 					"Attempt to insert duplicate key '" + str_key + "'.");
 			throw e;
@@ -396,6 +397,11 @@ private:
 	 */
 	void delete_tree(Node<K, V> *n) {
 		// TODO
+		if(n != NULL){
+			delete_tree(n->left());
+			delete_tree(n->right());
+			delete n;
+		}
 	}
 
 	/**
