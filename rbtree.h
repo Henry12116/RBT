@@ -250,6 +250,20 @@ public:
 		insert_fixup(insertedNode);
 	}
 
+	bool is_Duplicate(Node<K, V> *nodeStart, Node<K, V> *nodeSearch) {
+		if (nodeStart == NULL) {
+			return false;
+		}
+		if (nodeSearch->value() == nodeStart->value()) {
+			return true;
+		} else if (nodeSearch->value() > nodeStart->value()) {
+			is_Duplicate(nodeStart->right(), nodeSearch);
+		} else if (nodeSearch->value() < nodeStart->value()) {
+			is_duplicate(nodeStart->left(), nodeSearch);
+		}
+		return false;
+	}
+
 	/**
 	 * Inserts a key-value pair into the red-black tree.
 	 */
