@@ -323,6 +323,8 @@ public:
 	 * visited to find a key that is not present.
 	 */
 	double unsuccessful_search_cost() const {
+		std::cout << "Sum of Null Levels: "<<sum_null_levels()<<std::endl;
+		std::cout << "Null Count "<<null_count()<<std::endl;
 		return (double) sum_null_levels() / null_count();
 	}
 
