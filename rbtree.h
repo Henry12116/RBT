@@ -5,7 +5,7 @@
  * Date        : 6-22-2015
  * Description : Implementation of red-black tree.
  * Pledge      : We pledge our honor that we have abided by the Stevens Honor System
- * 					Kevin Furlong Henry Thomas, Jonathan S.
+ * 					Kevin Furlong, Henry Thomas, Jonathan S.
  ******************************************************************************/
 #ifndef RBTREE_H_
 #define RBTREE_H_
@@ -405,10 +405,9 @@ private:
 	}
 
 	/**
-	 * Fixup method described on p. 316 of CLRS.
+	 * Implementation of insert fixup method described on p. 316 of CLRS.
 	 */
 	void insert_fixup(RedBlackNode<K, V> *z) {
-		// TODO
 		RedBlackNode<K, V> *parent = z->parent();
 		if (parent == NULL) {
 			z->set_color(BLACK);
@@ -424,6 +423,8 @@ private:
 				return;
 			}
 
+			//Sets the grandparent equal to the parent of the parent
+			//Initializes uncle node
 			RedBlackNode<K, V> *grandparent = parent->parent(), *uncle;
 			if (parent == grandparent->left()) {
 				uncle = grandparent->right();
@@ -432,38 +433,44 @@ private:
 			}
 
 			//Violation Case 1
+			//Here the node being inserted has a red uncle
 			if (uncle != NULL && uncle->color() == RED) {
 				parent->set_color(BLACK);
 				uncle->set_color(BLACK);
 				grandparent->set_color(RED);
 				z = grandparent;
 				insert_fixup(z);
-			} else if (grandparent->left() == parent) {
-				//Violation Case 2
-				//Case 2a
+			}
+			//Z's parent is a left child and
+			else if (grandparent->left() == parent) {
+				//Case 2a: z's uncle is black and z is a right child
 				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
 						&& parent->right() == z) {
 					z = parent;
 					left_rotate(z);
 					insert_fixup(z);
-				} else if ((uncle == NULL
+				}
+				//Case 3a: z's uncle is black and z is a left child
+				else if ((uncle == NULL
 						|| (uncle != NULL && uncle->color() == BLACK))
 						&& parent->left() == z) {
-					//Case 3a
 					parent->set_color(BLACK);
 					grandparent->set_color(RED);
 					right_rotate(grandparent);
 					insert_fixup(z);
 				}
-			} else {
-				//case 2b
+			}
+			//Z's parent is a right child and
+			else {
+				//case 2b: z's uncle is black and z is a left child
 				if ((uncle == NULL || (uncle != NULL && uncle->color() == BLACK))
 						&& parent->left() == z) {
 					z = parent;
 					right_rotate(z);
 					insert_fixup(z);
-				} else {
-					//case 3b
+				}
+				//case 3b: z's uncle is black and z is a right child
+				else {
 					parent->set_color(BLACK);
 					grandparent->set_color(RED);
 					left_rotate(grandparent);
@@ -472,11 +479,12 @@ private:
 			}
 		}
 		// Last line below
+		//last step, set root color to black
 		root_->set_color(BLACK);
 	}
 
 	/**
-	 * Left-rotate method described on p. 313 of CLRS.
+	 * Implementation of left-rotate method as described on p. 313 of CLRS.
 	 */
 	void left_rotate(Node<K, V> *x) {
 		RedBlackNode<K, V> *y = static_cast<RedBlackNode<K, V>*>(x->right());
@@ -495,7 +503,7 @@ private:
 	}
 
 	/**
-	 * Right-rotate method described on p. 313 of CLRS.
+	 * Implementation of right-rotate method as described on p. 313 of CLRS.
 	 */
 	void right_rotate(Node<K, V> *x) {
 		RedBlackNode<K, V> *y = static_cast<RedBlackNode<K, V>*>(x->left());
@@ -589,6 +597,9 @@ private:
 					+ widthHelper(node->right(), level - 1);
 	}
 
+	/**
+	 * Helper function called by width.
+	 */
 	size_t widthHelper(Node<K, V> *node, size_t level) const {
 		if (node == NULL)
 			return 0;
@@ -598,6 +609,7 @@ private:
 			return widthHelper(node->left(), level - 1)
 					+ widthHelper(node->right(), level - 1);
 	}
+
 
 	size_t null_count() const {
 		return null_count(root_);
