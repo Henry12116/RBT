@@ -585,19 +585,9 @@ private:
 		else if (level == 0)
 			return 1;
 		else
-			return widthHelper(node->left(), level - 1)
-					+ widthHelper(node->right(), level - 1);
+			return width(node->left(), level - 1) + width(node->right(), level - 1);
 	}
 
-	size_t widthHelper(Node<K, V> *node, size_t level) const {
-		if (node == NULL)
-			return 0;
-		else if (level == 0)
-			return 1;
-		else
-			return widthHelper(node->left(), level - 1)
-					+ widthHelper(node->right(), level - 1);
-	}
 
 	size_t null_count() const {
 		return null_count(root_);
