@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Name          : testrbt.cpp
- * Author        : Brian S. Borowski
+ * Name          : extraCredit.cpp
+ * Author        : Kevin Furlong
  * Version       : 1.1
  * Date          : October 8, 2014
  * Last modified : April 9, 2015
@@ -88,9 +88,9 @@ int main(int argc, char *argv[]) {
 	input_file.exceptions(ifstream::badbit);
 	string line;
 	try {
-		unsigned int line_number = 1;
-		rbt = new RedBlackTree<string, string>();
-		rbts = static_cast<RedBlackTree<string, string> *>(rbt);
+		//unsigned int line_number = 1;
+		rbt = new RedBlackTree<string, int>();
+		//rbts = static_cast<RedBlackTree<string, int> *>(rbt);
 
 		while (getline(input_file, line)) {
 			for (int i = 1; i < argc; ++i) {
@@ -103,12 +103,12 @@ int main(int argc, char *argv[]) {
 					converter.str(line.substr(start, end - start));
 					converter >> inserted_key;
 					try {
-						static_cast<RedBlackTree<string, string> *>(rbt)->insert(
-								inserted_key, inserted_key);
+						static_cast<RedBlackTree<string, int> *>(rbt)->insert(
+								inserted_key, 1);
 					} catch (const tree_exception &te) {
 						RedBlackTree<string, string>::iterator it = rbts->find(
 								inserted_key);
-						++(*it).second;
+						(*it).second += 1;
 					}
 					converter.clear();
 					start = end + 1;
@@ -118,12 +118,12 @@ int main(int argc, char *argv[]) {
 				converter >> inserted_key;
 				converter.clear();
 				try {
-					static_cast<RedBlackTree<string, string> *>(rbt)->insert(
-							inserted_key, inserted_key);
+					static_cast<RedBlackTree<string, int> *>(rbt)->insert(
+							inserted_key, 1);
 				} catch (const tree_exception &te) {
 					RedBlackTree<string, string>::iterator it = rbts->find(
-													inserted_key);
-											++(*it).second;
+							inserted_key);
+					(*it).second += 1;
 				}
 
 			}
