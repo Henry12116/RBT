@@ -71,6 +71,15 @@ void test_find() {
 	}
 }
 
+/**
+ * Used in sorting arrays
+ */
+bool sort_val(int i, int j){
+	return i < j;
+}
+
+
+
 int main(int argc, char *argv[]) {
 	if (argc <= 1 || argc > 3) {
 		cout << "Usage: ./commonwordfinder <filename> [limit]";
@@ -139,6 +148,14 @@ int main(int argc, char *argv[]) {
 		test_find();
 	} catch (const tree_exception &te) {
 		cerr << "Error: " << te.what() << endl;
+	}
+
+	//given a vector of nodes, sort them by value first them key if values are equilivalent
+	std::sort (rbt.begin(), rbt.end(), sort_val)
+
+	//print the exact amount of words the user wants to see
+	for (int w = 1; w < arg[2] || 10; ++w){
+		cout << rbt[w-1] << endl;
 	}
 
 	delete rbt;
